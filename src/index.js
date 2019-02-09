@@ -100,6 +100,8 @@ class Kalendaryo extends Component {
      */
     startWeekAt: pt.number,
 
+
+		locale: pt.object,
     /**
      * @callback onChangeCallback
      * @prop {func} onChange
@@ -154,8 +156,14 @@ class Kalendaryo extends Component {
     startWeekAt: 0,
     defaultFormat: 'MM/DD/YY',
     startCurrentDateAt: new Date(),
-    startSelectedDateAt: new Date()
-  }
+		startSelectedDateAt: new Date(),
+		locale: undefined
+	}
+
+	format = (arg, dateFormat) => {
+		if (this.props.locale) return format(arg, dateFormat, { locale: this.props.locale});
+		return format(arg, dateFormat);
+	}
 
   /**
    * Formats a given {Date} base on the {string} format
@@ -168,15 +176,15 @@ class Kalendaryo extends Component {
    */
   getFormattedDate = (arg = this.state.date, dateFormat) => {
     if (isDate(arg) && dateFormat === undefined) {
-      return format(arg, this.props.defaultFormat)
+      return this.format(arg, this.props.defaultFormat)
     }
 
     if (typeof arg === 'string' && dateFormat === undefined) {
-      return format(this.state.date, arg)
+      return this.format(this.state.date, arg)
     }
 
     if (isDate(arg) && typeof dateFormat === 'string') {
-      return format(arg, dateFormat)
+      return this.format(arg, dateFormat)
     }
 
     misusageThrow('getFormattedDate')
@@ -290,7 +298,7 @@ class Kalendaryo extends Component {
     const firstDayOfFirstWeek = startOfWeek(firstDayOfMonth, weekOptions)
     const lastDayOfFirstWeek = endOfWeek(firstDayOfMonth, weekOptions)
 
-    return eachDay(firstDayOfFirstWeek, lastDayOfFirstWeek).map(d => format(d, dayLabelFormat))
+    return eachDay(firstDayOfFirstWeek, lastDayOfFirstWeek).map(d => this.format(d, dayLabelFormat))
   }
 
   /**
