@@ -9,7 +9,7 @@ import {
   isEqual as isEqualDates,
   startOfMonth,
   endOfMonth,
-  eachDay,
+  eachDayOfInterval,
   addWeeks,
   startOfWeek,
   endOfWeek,
@@ -154,16 +154,16 @@ class Kalendaryo extends Component {
 
   static defaultProps = {
     startWeekAt: 0,
-    defaultFormat: 'MM/DD/YY',
+    defaultFormat: 'MM/dd/yy',
     startCurrentDateAt: new Date(),
-		startSelectedDateAt: new Date(),
-		locale: undefined
-	}
+    startSelectedDateAt: new Date(),
+    locale: undefined
+  }
 
-	format = (arg, dateFormat) => {
-		if (this.props.locale) return format(arg, dateFormat, { locale: this.props.locale});
-		return format(arg, dateFormat);
-	}
+  format = (arg, dateFormat) => {
+    if (this.props.locale) return format(arg, dateFormat, { locale: this.props.locale })
+    return format(arg, dateFormat)
+  }
 
   /**
    * Formats a given {Date} base on the {string} format
@@ -247,7 +247,7 @@ class Kalendaryo extends Component {
    */
   getDaysInMonth = (date = this.state.date) => {
     if (!isDate(date)) throw new Error('Value is not an instance of Date')
-    return eachDay(startOfMonth(date), endOfMonth(date)).map(createDayObject)
+    return eachDayOfInterval({start: startOfMonth(date),  end: endOfMonth(date)}).map(createDayObject)
   }
 
   /**
@@ -269,7 +269,7 @@ class Kalendaryo extends Component {
     const lastDayOfFirstWeek = endOfWeek(firstDayOfMonth, weekOptions)
 
     const getWeeks = (startDay, endDay, weekArray = []) => {
-      const week = eachDay(startDay, endDay).map(createDayObject)
+      const week = eachDayOfInterval({start: startDay, end: endDay}).map(createDayObject)
       const weeks = [...weekArray, week]
       const nextWeek = addWeeks(startDay, 1)
 
@@ -292,13 +292,13 @@ class Kalendaryo extends Component {
    * @param {string} [dayLabelFormat='ddd'] - Format of the day labels
    * @returns {string[]} - An array of each day on a week
    */
-  getDayLabelsInWeek = (dayLabelFormat = 'ddd') => {
+  getDayLabelsInWeek = (dayLabelFormat = 'EEE') => {
     const weekOptions = { weekStartsOn: this.props.startWeekAt }
     const firstDayOfMonth = startOfMonth(this.state.date)
     const firstDayOfFirstWeek = startOfWeek(firstDayOfMonth, weekOptions)
     const lastDayOfFirstWeek = endOfWeek(firstDayOfMonth, weekOptions)
 
-    return eachDay(firstDayOfFirstWeek, lastDayOfFirstWeek).map(d => this.format(d, dayLabelFormat))
+    return eachDayOfInterval({start: firstDayOfFirstWeek, end: lastDayOfFirstWeek}).map(d => this.format(d, dayLabelFormat))
   }
 
   /**

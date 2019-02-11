@@ -39,7 +39,7 @@
     "react": ">=0.14.x"
   },
   "dependencies": {
-    "date-fns": "1.x",
+    "date-fns": "next",
     "prop-types": ">=15"
   },
   "devDependencies": {

@@ -20,16 +20,16 @@ afterEach(cleanup)
 
 describe('Methods', () => {
   describe('#getFormattedDate', () => {
-    test('Formats state.date as \'MM/DD/YY\' by default when no arguments are given', () => {
+    test('Formats state.date as \'MM/dd/yy\' by default when no arguments are given', () => {
       const {getFormattedDate} = setup().renderArgs
       const today = new Date()
-      const defaultFormat = 'MM/DD/YY'
+      const defaultFormat = 'MM/dd/yy'
       expect(getFormattedDate()).toBe(format(today, defaultFormat))
     })
 
     test('Properly formats a date from the given format string', () => {
       const {date, getFormattedDate} = setup().renderArgs
-      const dateFormats = ['MM/DD/YYYY', 'MMMM Do, YYYY', 'MMM Mo']
+      const dateFormats = ['MM/dd/yy', 'MMMM Do, y', 'MMM Mo']
 
       dateFormats.forEach(df => {
         expect(getFormattedDate(df)).toBe(format(date, df))
@@ -180,7 +180,7 @@ describe('Methods', () => {
       const actualDay = days[dayIndex]
       getWeeksInMonth(date, dayIndex).forEach(week => {
         const {dateValue} = week[0]
-        const day = format(dateValue, 'ddd').toLowerCase()
+        const day = format(dateValue, 'EEE').toLowerCase()
         expect(day).toBe(actualDay)
       })
     })

@@ -1,7 +1,7 @@
 import { render, cleanup } from 'react-testing-library'
 import {
   format,
-  isToday,
+  isSameDay,
   addDays,
   subDays,
   addMonths,
@@ -17,13 +17,13 @@ afterEach(cleanup)
 
 describe('Props', () => {
   describe('#defaultFormat', () => {
-    test('Formats the value in `getFormattedDate()` as MM/DD/YY by default', () => {
+    test('Formats the value in `getFormattedDate()` as MM/dd/yy by default', () => {
       const { getFormattedDate, date } = setup()
-      expect(getFormattedDate()).toBe(format(date, 'MM/DD/YY'))
+      expect(getFormattedDate()).toBe(format(date, 'MM/dd/yy'))
     })
 
     test('Properly modifies the format string of `getFormattedDate()`', () => {
-      const dateFormats = ['YYYY-MM-DD', 'MMM Do, YYYY', 'MMMM Do, YYYY']
+      const dateFormats = ['yyyy-MM-dd', 'MMM Do, yyyy', 'MMMM Do, yyyy']
       dateFormats.forEach(dateFormat => {
         const { getFormattedDate, date } = setup({ defaultFormat: dateFormat })
         expect(getFormattedDate()).toBe(format(date, dateFormat))
@@ -42,7 +42,7 @@ describe('Props', () => {
   describe('#startCurrentDateAt', () => {
     test('Sets the `date` state to today by default', () => {
       const { date } = setup()
-      expect(isToday(date)).toBe(true)
+      expect(isSameDay(new Date(), date)).toBe(true)
     })
 
     test('Properly sets the `date` state to the given Date value', () => {
@@ -62,7 +62,7 @@ describe('Props', () => {
       const invalidArgs = [1, false, [], {}]
       invalidArgs.forEach(invalidArg => {
         const { date } = setup({ startCurrentDateAt: invalidArg })
-        expect(isToday(date)).toBe(true)
+        expect(isSameDay(new Date(), date)).toBe(true)
       })
     })
   })
@@ -70,7 +70,7 @@ describe('Props', () => {
   describe('#startSelectedDateAt', () => {
     test('Sets the `selectedDate` state to today by default', () => {
       const { selectedDate } = setup()
-      expect(isToday(selectedDate)).toBe(true)
+      expect(isSameDay(new Date(), selectedDate)).toBe(true)
     })
 
     test('Properly sets the `selectedDate` state to the given Date value', () => {
@@ -92,7 +92,7 @@ describe('Props', () => {
       const invalidArgs = [1, false, [], {}]
       invalidArgs.forEach(invalidArg => {
         const { selectedDate } = setup({ startSelectedDateAt: invalidArg })
-        expect(isToday(selectedDate)).toBe(true)
+        expect(isSameDay(new Date(), selectedDate)).toBe(true)
       })
     })
   })
@@ -102,7 +102,7 @@ describe('Props', () => {
       const weeks = setup().getWeeksInMonth()
       weeks.forEach(week => {
         const firstDayOfWeek = week[0].dateValue
-        expect(format(firstDayOfWeek, 'dddd')).toBe('Sunday')
+        expect(format(firstDayOfWeek, 'EEEE')).toBe('Sunday')
       })
     })
 
@@ -120,7 +120,7 @@ describe('Props', () => {
         const weeks = setup({ startWeekAt: dayIndex }).getWeeksInMonth()
         weeks.forEach(week => {
           const firstDayOfWeek = week[0].dateValue
-          expect(format(firstDayOfWeek, 'dddd')).toBe(dayLabel)
+          expect(format(firstDayOfWeek, 'EEEE')).toBe(dayLabel)
         })
       })
     })
