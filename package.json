@@ -36,9 +36,7 @@
   },
   "homepage": "https://github.com/geeofree/kalendaryo#readme",
   "peerDependencies": {
-    "react": ">=0.14.x"
-  },
-  "dependencies": {
+    "react": ">=0.14.x",
     "date-fns": "next",
     "prop-types": ">=15"
   },
